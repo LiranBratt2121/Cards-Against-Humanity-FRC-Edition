@@ -3,8 +3,11 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import { useState } from 'react';
 
+import RoomUtils from "../HandleRooms"
+
 const JoinRoomScreen = () => {
-  const [text, setText] = useState("");
+  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
 
   return (
     <View style={styles.container}>
@@ -12,11 +15,21 @@ const JoinRoomScreen = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Enter Room Code"
-        onChangeText={(text) => setText(text)} 
+        placeholder="Enter Username"
+        onChangeText={(name) => setName(name)}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter Room Code"
+        onChangeText={(text) => setCode(text)}
+      />
+
+      <TouchableOpacity style={styles.button}
+        onPress={() => {
+          RoomUtils.UpdateRoomPlayerCount(code, name);
+        }}
+      >
         <Text style={styles.buttonText}>Join</Text>
       </TouchableOpacity>
     </View>
