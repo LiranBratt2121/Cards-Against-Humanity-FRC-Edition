@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import { useState } from 'react';
 
+import generateRoomPassword from "../screens/utils"
 import CodeCopyButton from "../components/CodeCopyButton";
 
 const CreateRoomScreen = () => {
@@ -21,7 +22,7 @@ const CreateRoomScreen = () => {
       <View style={styles.codeCopyBoxContainer}>
         {pressed && (
           <CodeCopyButton
-            code={"Example Code"}
+            code={generateRoomPassword()}
           />
         )}
       </View>
