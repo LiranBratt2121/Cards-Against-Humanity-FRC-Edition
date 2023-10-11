@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import RoomUtils from "../HandleRooms"
 
-const JoinRoomScreen = () => {
+const JoinRoomScreen = ({ navigation }) => {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
 
@@ -27,7 +27,10 @@ const JoinRoomScreen = () => {
 
       <TouchableOpacity style={styles.button}
         onPress={() => {
-          RoomUtils.UpdateRoomPlayerCount(code, name);
+          {
+            RoomUtils.updateRoomPlayerCount(code, name)
+            navigation.navigate('GameRoom', { roomCode: code, playerName: name })
+          }
         }}
       >
         <Text style={styles.buttonText}>Join</Text>
