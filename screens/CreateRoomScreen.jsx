@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import { useState } from 'react';
 
-import generateRoomPassword from "../screens/utils"
+import generateRoomPassword from "./RoomUtils"
 import CodeCopyButton from "../components/CodeCopyButton";
 
 const CreateRoomScreen = () => {
