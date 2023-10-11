@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./screens/HomeScreen";
 import CreateRoomScreen from "./screens/CreateRoomScreen";
 import JoinRoomScreen from "./screens/JoinRoomScreen";
-
+import GameScreen from "./screens/GameScreen";
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -15,6 +15,7 @@ const App = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="CreateRoom" component={CreateRoomScreen} />
         <Stack.Screen name="JoinRoom" component={JoinRoomScreen} />
+        <Stack.Screen name="GameRoom" component={GameScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
