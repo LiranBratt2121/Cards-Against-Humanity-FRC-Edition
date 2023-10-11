@@ -6,7 +6,7 @@ const HomeScreen = ({ navigation }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Cards Against Humanity</Text>
-        <Text style={styles.secondaryTitle}>Cards  Against Humanity</Text>
+        <Text style={styles.secondaryTitle}>~FRC edition</Text>
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
