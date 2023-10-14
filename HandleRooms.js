@@ -17,31 +17,34 @@ class RoomUtils {
 
   static isRoomExists = async (roomId) => {
     const roomRef = ref(db, "Rooms/" + roomId);
+    var roomData = {}
 
     onValue(roomRef, (snapshot) => {
-      const roomData = snapshot.val();
+      roomData = snapshot.val();
 
-      console.log(roomData.roomCode !== undefined);
+      return (roomData.roomCode !== undefined);
     });
+
+    console.log(roomData.roomCode)
   };
 
-  static UpdateRoomPlayerCount = (roomId, addedUser) => {
+  static updateRoomPlayerCount = (roomId, addedUser) => {
     const dbRef = ref(db);
 
     get(child(dbRef, `Rooms/${roomId}`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           const users = snapshot.val()["users"];
-          console.log(users);
-
+          // console.log(users);
+          console.log(users[0]['playerName'])          
           for (let i = 0; i < users.length; i++) {
-            if (typeof users[i] === "number") {
-              users[i] = addedUser;
+            if (typeof users[i]['playerName'] === "number") {
+              users[i]['playerName'] = addedUser;
               break;
             }
           }
 
-          console.log(users);
+          // console.log(users);
 
           update(ref(db, "Rooms/" + roomId), {
             users: users,
@@ -54,14 +57,32 @@ class RoomUtils {
             .catch((e) => {
               console.error("Error updating the room:", e);
             });
-        }else{
-          alert("Room does not exist!")
-          console.log("Room does not exist!")
+        } else {
+          alert("Room does not exist!");
+          console.log("Room does not exist!");
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+  };
+
+  static notifyRoomUsers = (roomId, userName, message) => {
+    const dbRef = ref(db);
+
+    get(child(dbRef, `Rooms/${roomId}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const roomData = snapshot.val();
+        const messages = roomData.messages || [];
+
+        messages.push({ user: userName, message });
+
+        update(ref(db, `Rooms/${roomId}/messages`), messages)
+          .then(() => {
+            console.log(`Message added to the room ${roomId} successfully!`);
+          })
+          .catch((e) => {
+            console.error("Error updating the messages:", e);
+          });
+      }
+    });
   };
 }
 
