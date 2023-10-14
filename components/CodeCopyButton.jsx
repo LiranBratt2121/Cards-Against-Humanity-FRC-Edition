@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import * as Clipboard from 'expo-clipboard';
 import RoomUtils from "../HandleRooms"
-
+import generatePlayers from "./ComponentsUtils";
 
 const CodeCopyButton = ({ code }) => {
     return (
@@ -11,9 +11,10 @@ const CodeCopyButton = ({ code }) => {
             <TouchableOpacity style={styles.copyButton} onPress={async () => {
                 alert("Copied code to clipboard");
                 await Clipboard.setStringAsync(code)
-                RoomUtils.createRoom(code, [1, 2, 3, 4, 5, 6, 7, 8])
+                RoomUtils.createRoom(code, generatePlayers())
             }}>
                 <Text>Copy</Text>
+
             </TouchableOpacity>
         </View>
     )
