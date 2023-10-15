@@ -9,9 +9,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-  codeText: {
+  generalText: {
     fontSize: 16,
     fontFamily: "monospace",
+    textAlign: "center",
+    fontWeight: 'bold',
   },
   copyButton: {
     backgroundColor: "#007AFF",

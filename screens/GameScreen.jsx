@@ -15,7 +15,9 @@ const GameScreen = ({ route }) => {
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={() => {RoomUtils.notifyRoomUsers(roomCode, playerName, "Hello, world!")}}
+                    onPress={() => {
+                        RoomUtils.updateDb(`Rooms/${roomCode}`, { alertAll: Math.random() })
+                    }}
                 >
                     <Text style={styles.buttonFont}>Click To notify Room members!</Text>
                 </TouchableOpacity>

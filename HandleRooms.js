@@ -1,4 +1,4 @@
-import { ref, set, onValue, update, get, child } from "firebase/database";
+import { ref, set, onValue, get, child, update } from "firebase/database";
 import { db } from "../cards-against-frc/firebaseConfig";
 
 class RoomUtils {
@@ -6,6 +6,7 @@ class RoomUtils {
     set(ref(db, "Rooms/" + roomCode), {
       roomCode: roomCode,
       users: users,
+      alertAll: 'NaN'
     })
       .then(() => {
         alert(`Room ${roomCode} created successfully!`);
@@ -17,73 +18,72 @@ class RoomUtils {
 
   static isRoomExists = async (roomId) => {
     const roomRef = ref(db, "Rooms/" + roomId);
-    var roomData = {}
 
     onValue(roomRef, (snapshot) => {
-      roomData = snapshot.val();
+      const roomData = snapshot.val();
 
-      return (roomData.roomCode !== undefined);
+      if (roomData && roomData.roomCode !== undefined) {
+        console.log(roomData.roomCode);
+        return true;
+      } else {
+        return false;
+      }
     });
-
-    console.log(roomData.roomCode)
   };
 
   static updateRoomPlayerCount = (roomId, addedUser) => {
     const dbRef = ref(db);
 
-    get(child(dbRef, `Rooms/${roomId}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const users = snapshot.val()["users"];
-          // console.log(users);
-          console.log(users[0]['playerName'])          
-          for (let i = 0; i < users.length; i++) {
-            if (typeof users[i]['playerName'] === "number") {
-              users[i]['playerName'] = addedUser;
-              break;
-            }
-          }
-
-          // console.log(users);
-
-          update(ref(db, "Rooms/" + roomId), {
-            users: users,
-          })
-            .then(() => {
-              console.log(
-                `User ${addedUser} added to the room ${roomId} successfully!`
-              );
-            })
-            .catch((e) => {
-              console.error("Error updating the room:", e);
-            });
-        } else {
-          alert("Room does not exist!");
-          console.log("Room does not exist!");
-        }
-      })
-  };
-
-  static notifyRoomUsers = (roomId, userName, message) => {
-    const dbRef = ref(db);
-
     get(child(dbRef, `Rooms/${roomId}`)).then((snapshot) => {
       if (snapshot.exists()) {
-        const roomData = snapshot.val();
-        const messages = roomData.messages || [];
+        const users = snapshot.val()["users"];
 
-        messages.push({ user: userName, message });
+        for (let i = 0; i < users.length; i++) {
+          // May change to array.find method for optimization later
+          if (typeof users[i]["playerName"] === "number") {
+            users[i]["playerName"] = addedUser;
+            break;
+          }
+        }
 
-        update(ref(db, `Rooms/${roomId}/messages`), messages)
+        update(ref(db, "Rooms/" + roomId), {
+          users: users,
+        })
           .then(() => {
-            console.log(`Message added to the room ${roomId} successfully!`);
+            console.log(
+              `User ${addedUser} added to the room ${roomId} successfully!`
+            );
           })
           .catch((e) => {
-            console.error("Error updating the messages:", e);
+            console.error("Error updating the room:", e);
           });
+      } else {
+        alert("Room does not exist!");
+        console.log("Room does not exist!");
       }
     });
   };
+
+  static alertCheck = (roomId) => {
+    const dbRef = ref(db, `Rooms/${roomId}/alertAll`);
+    
+    onValue(dbRef, (_) => {
+      console.log(`Notified All!`)
+    });
+
+  };
+
+  static newPlayerAlert = (roomId) => {
+    const dbRef = ref(db, `Rooms/${roomId}/users`);
+    
+    onValue(dbRef, (snapshot) => {
+      
+    })
+  }
+
+  static updateDb = (href, content) => {
+    update(ref(db, href), content);
+  }
 }
 
 export default RoomUtils;

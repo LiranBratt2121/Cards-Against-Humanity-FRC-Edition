@@ -7,13 +7,15 @@ import generatePlayers from "./ComponentsUtils";
 const CodeCopyButton = ({ code }) => {
     return (
         <View>
-            <Text style={styles.codeText}>{code}</Text>
+            <Text style={styles.generalText}>{code}</Text>
             <TouchableOpacity style={styles.copyButton} onPress={async () => {
                 alert("Copied code to clipboard");
                 await Clipboard.setStringAsync(code)
+
                 RoomUtils.createRoom(code, generatePlayers())
+                RoomUtils.alertCheck(code, null, null)
             }}>
-                <Text>Copy</Text>
+                <Text style={[styles.generalText, { color: 'mintcream' }]}>Copy & Create Room</Text>
 
             </TouchableOpacity>
         </View>
